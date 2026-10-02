@@ -55,6 +55,12 @@ jobs:
       - name: Test repeated quick entry and source field
         run: node scripts/test_quick_entry.js
 
+      - name: Validate quick entry source
+        run: |
+          node --check scripts/test_quick_entry.js
+          node scripts/test_quick_entry.js
+          grep -q 'when (result.trim' app/src/main/java/com/quan/thuchi/QuickEntryActivity.kt
+
       - name: Build debug APK
         run: gradle --no-daemon --stacktrace :app:assembleDebug
 
