@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             mediaPlaybackRequiresUserGesture = true
         }
 
-        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
+        WebView.setWebContentsDebuggingEnabled(false)
         webView.addJavascriptInterface(AndroidBridge(), "Android")
         webView.webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? = assetLoader.shouldInterceptRequest(request.url)
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 webView.evaluateJavascript("window.handleAndroidBack ? window.handleAndroidBack() : 'exit'") { result ->
-                    if (result == ""exit"") finish()
+                    if (result == "\"exit\"") finish()
                 }
             }
         })
