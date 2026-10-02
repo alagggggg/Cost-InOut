@@ -1,4 +1,4 @@
-name: Build Android APK V72
+name: Build Android APK V78
 
 on:
   workflow_dispatch:
@@ -52,16 +52,19 @@ jobs:
           test -f app/src/main/assets/index.html
           test -f app/src/main/res/layout/widget_quick_entry.xml
 
+      - name: Test repeated quick entry and source field
+        run: node scripts/test_quick_entry.js
+
       - name: Build debug APK
         run: gradle --no-daemon --stacktrace :app:assembleDebug
 
       - name: Rename APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk ThuChi-V72-WidgetQuickDialog-debug.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk ThuChi-V78-WhiteScreenFix-debug.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ThuChi-V72-WidgetQuickDialog-debug-apk
-          path: ThuChi-V72-WidgetQuickDialog-debug.apk
+          name: ThuChi-V78-WhiteScreenFix-debug-apk
+          path: ThuChi-V78-WhiteScreenFix-debug.apk
           if-no-files-found: error
           retention-days: 30
