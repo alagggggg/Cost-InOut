@@ -1,7 +1,9 @@
-name: Build Android APK V68
+name: Build Android APK V69
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
   build:
@@ -16,32 +18,43 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17"
+          java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Accept Android SDK licenses
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
 
-      - name: Install Android SDK 37
-        run: sdkmanager "platforms;android-37" "build-tools;36.0.0"
+      - name: Install Android SDK packages
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "platform-tools" \
+            "platforms;android-37" \
+            "build-tools;36.0.0"
 
       - name: Set up Gradle 9.3.1
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: "9.3.1"
+          gradle-version: '9.3.1'
 
-      - name: Verify versions
+      - name: Verify versions and project
         run: |
           java -version
           gradle --version
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          test -f settings.gradle.kts
+          test -f app/build.gradle.kts
+          test -f app/src/main/assets/index.html
           grep 'com.android.application' build.gradle.kts
 
       - name: Build debug APK with Gradle 9.3.1
         run: gradle --no-daemon --stacktrace :app:assembleDebug
 
+      - name: Rename APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk ThuChi-V69-Widget4x2-debug.apk
+
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ThuChi-V67-Widget4x2-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: ThuChi-V69-Widget4x2-debug-apk
+          path: ThuChi-V69-Widget4x2-debug.apk
           if-no-files-found: error
           retention-days: 30
