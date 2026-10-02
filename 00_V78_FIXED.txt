@@ -1,0 +1,5 @@
+V78 FIXED
+- Sua loi Kotlin QuickEntryActivity.kt dong 25.
+- Bo cach parse JSON co chuoi escape phuc tap.
+- Ket qua JavaScript chi dung cac ma: OK, NOT_READY, INVALID_CATEGORY, INVALID_AMOUNT, PERSIST_FAILED.
+- Sua loi man hinh trang do normalizeTransaction truy cap categories qua som.
