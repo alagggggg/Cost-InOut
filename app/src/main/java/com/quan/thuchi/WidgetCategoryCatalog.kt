@@ -1,8 +1,16 @@
 package com.quan.thuchi
 
-data class CategoryItem(val id:String,val icon:String,val kind:String,val name:String){override fun toString()="$icon  $name"}
+import org.json.JSONObject
+
+data class CategoryItem(
+    val id: String,
+    val icon: String,
+    val kind: String,
+    val name: String
+)
+
 object WidgetCategoryCatalog {
-    val all=listOf(
+    val all = listOf(
         CategoryItem("salary", "💼", "income", "Lương cố định"),
         CategoryItem("bonus", "💰", "income", "Thưởng / Phúc lợi"),
         CategoryItem("partner", "💸", "income", "Thu nhập bạn đời"),
@@ -24,6 +32,35 @@ object WidgetCategoryCatalog {
         CategoryItem("debt_payment", "💳", "expense", "Trả nợ & Trả góp"),
         CategoryItem("unexpected", "⚠️", "expense", "Phát sinh bất ngờ")
     )
-    fun byKind(kind:String)=all.filter{it.kind==kind}
-    fun find(id:String)=all.firstOrNull{it.id==id}
+
+    fun byKind(kind: String) = all.filter { it.kind == kind }
+    fun find(id: String) = all.firstOrNull { it.id == id }
+
+    fun cleanText(value: String): String = value
+        .replace(Regex("<[^>]*>"), "")
+        .replace("[object Object]", "", ignoreCase = true)
+        .replace("ObjectHTML", "", ignoreCase = true)
+        .replace("HTMLObjectElement", "", ignoreCase = true)
+        .trim()
+
+    fun normalizeStoredId(raw: String?, kind: String, fallback: String): String {
+        val value = raw.orEmpty().trim()
+        find(value)?.takeIf { it.kind == kind }?.let { return it.id }
+
+        if (value.startsWith("{")) {
+            runCatching { JSONObject(value).optString("id") }
+                .getOrNull()
+                ?.let { find(it) }
+                ?.takeIf { it.kind == kind }
+                ?.let { return it.id }
+        }
+
+        val cleaned = cleanText(value)
+        byKind(kind).firstOrNull {
+            it.name.equals(cleaned, ignoreCase = true) ||
+                "${it.icon} ${it.name}".equals(cleaned, ignoreCase = true)
+        }?.let { return it.id }
+
+        return find(fallback)?.takeIf { it.kind == kind }?.id ?: byKind(kind).first().id
+    }
 }

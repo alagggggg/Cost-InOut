@@ -36,3 +36,12 @@ Luôn giữ nguyên `applicationId = com.quan.thuchi` và URL AssetLoader để 
 - Nhấn nút sẽ mở ứng dụng, chọn sẵn loại giao dịch và sự kiện, đặt con trỏ tại ô số tiền.
 - Nút MỞ ↗ mở thẳng ứng dụng.
 - Muốn thay cấu hình: xóa widget và thêm lại, sau đó nhập 8 tên mới.
+
+## V73 widget cải tiến
+
+- Cấu hình 8 nút bằng danh mục chuẩn của ứng dụng, không nhập tên tự do.
+- Mỗi ô widget hiển thị biểu tượng 24sp và tên danh mục thuần văn bản.
+- Loại bỏ hiện tượng hiển thị Object/HTML trong cấu hình hoặc widget.
+- Nhấn danh mục mở hộp nhập nhanh nổi, không mở màn hình chính.
+- Hộp nhập nhanh có hệ số x1, x1K, x1M, x1B và tự chọn hệ số mặc định của ứng dụng.
+- Số tiền thực tế được xem trước trước khi lưu.
