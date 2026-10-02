@@ -1,4 +1,4 @@
-name: Build Android APK V70
+name: Build Android APK V72
 
 on:
   workflow_dispatch:
@@ -56,12 +56,12 @@ jobs:
         run: gradle --no-daemon --stacktrace :app:assembleDebug
 
       - name: Rename APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk ThuChi-V70-Widget4x2-debug.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk ThuChi-V72-WidgetQuickDialog-debug.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ThuChi-V70-Widget4x2-debug-apk
-          path: ThuChi-V70-Widget4x2-debug.apk
+          name: ThuChi-V72-WidgetQuickDialog-debug-apk
+          path: ThuChi-V72-WidgetQuickDialog-debug.apk
           if-no-files-found: error
           retention-days: 30
